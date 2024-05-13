@@ -1,0 +1,17 @@
+{
+  "name": "email-corrector",
+  "version": "1.0.0",
+  "description": "A server for processing GPT requests and response for HCI Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "Hello world!"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "openai": "^4.33.0"
+  }
+}
