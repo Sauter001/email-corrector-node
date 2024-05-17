@@ -1,23 +1,21 @@
 require("dotenv").config();
 const OpenAIApi = require("openai");
+const fs = require("fs");
 
 const openai = new OpenAIApi({
   api_key: "process.env.OPENAI_API_KEY",
 });
 
-async function callGPT(prompt) {
+const gen_content_inst = fs.readFileSync("gen_prompt.md").toString();
+
+async function generateMail(prompt) {
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
-          content:
-            "You should now compose your email based on the compose purpose provided. \
-                  For example When a user provides an email creation purpose, \
-                  send a clean email based on that purpose.\
-                Make sure you know who you're sending it to, so that you can change the tone of voice accordingly. \
-                You must response in Korean when asked Korean but its sentence must sound natural. Write in detail.",
+          content: gen_content_inst,
         },
         { role: "user", content: prompt },
       ],
@@ -36,4 +34,4 @@ async function callGPT(prompt) {
   }
 }
 
-module.exports = { callGPT };
+module.exports = { generateMail };
