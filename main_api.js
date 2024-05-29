@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 
-let { generateMail } = require("./email-gpt");
+let { generateMail, correctEmail } = require("./email-gpt");
 
 app.use(express.json());
 app.get("/", (req, res) => {
@@ -14,11 +14,11 @@ app.get("/", (req, res) => {
  * @param purpose: 이메일 작성 목적
  */
 app.post("/createEmail", async (req, res) => {
-  const { purpose } = req.body;
+  const { receiver, purpose } = req.body;
 
   try {
     const title_reg = new RegExp(/##\s*([^\r\n]+)([\s\S]*)/); // 이메일의 제목 추출위한 정규표현식
-    const result = await generateMail(purpose); // await 키워드로 비동기 함수 호출
+    const result = await generateMail(receiver, purpose); // await 키워드로 비동기 함수 호출
 
     // 생성 결과에서 제목과 본문 추출
     const matches = result.match(title_reg);
@@ -43,7 +43,14 @@ app.post("/createEmail", async (req, res) => {
  */
 app.post("/correctEmail", async (req, res) => {
   const { tone, quantity, expression, spelling, mood, emailBody } = req.body;
-  res.json({ ok: true, test: "테스트" });
+
+  try {
+    const result = await correctEmail(req.body);
+    res.json({ ok: true, correctedBody: result });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ ok: false, error: "Failed to correct email" }); // 오류 처리
+  }
 });
 
 app.listen(PORT, () => {
