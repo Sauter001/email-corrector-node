@@ -74,8 +74,9 @@ async function correctEmail(content_for_correct) {
       messages: [
         {
           role: "system",
-          content: correct_content_inst + "\n" + whole_assistant_prompt,
+          content: correct_content_inst,
         },
+        { role: "system", content: whole_assistant_prompt },
         { role: "user", content: emailBody }, // 사용자 메시지로 프롬프트를 설정
       ],
       temperature: 0.95, // 메일 내용의 다양성 조절하는 온도

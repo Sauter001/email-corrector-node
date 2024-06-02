@@ -1,10 +1,12 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const PORT = 3000;
 
 let { generateMail, correctEmail } = require("./email-gpt");
 
 app.use(express.json());
+app.use(cors());
 app.get("/", (req, res) => {
   res.send("<h1>Hello Node.js!<h1/>");
 });
@@ -34,11 +36,11 @@ app.post("/createEmail", async (req, res) => {
 
 /**
  * 이메일 교정 기능 POST 요청
- * @param {string} tone - 이메일의 말투 수준
+ * @param {number} tone - 이메일의 말투 수준
  * @param {number} quantity - 이메일의 분량
- * @param {string} expression - 이메일의 표현 수준
- * @param {boolean} spelling - 맞춤법 및 철자 검사 여부
- * @param {string} mood - 이메일의 분위기
+ * @param {number} expression - 이메일의 표현 수준
+ * @param {list: string} spelling - 맞춤법 및 철자 검사 여부
+ * @param {number} mood - 이메일의 분위기
  * @param {string} emailBody - 교정된 이메일 본문
  */
 app.post("/correctEmail", async (req, res) => {
