@@ -4,8 +4,7 @@ Criteria:
 
 - Tone: Very formal and respectful (level 3)
 - Quantity: Highly detailed and specific (level 3)
-- Expression: Includes polite greetings and personal regards (level 3)
-- Spelling: Correct typos, spacing, and punctuation
+- Spelling: Correct typos, spacing, and punctuation (i.e. 오타, 띄어쓰기, 문장부호)
 
 Here is an example of the original email corrected:
 
@@ -19,6 +18,6 @@ Here is an example of the original email corrected:
 
 감사합니다."
 
-Correct and refine this email according to the specified criteria.
+Correct and refine user-provided email according to the specified criteria.
 
 - Never use '존경하십니다.'

@@ -48,20 +48,18 @@ async function correctEmail(content_for_correct) {
     .readFileSync("correction_prompt.md")
     .toString();
   slider_desc = JSON.parse(fs.readFileSync("slider_description.json"));
-  const { tone, quantity, expression, spelling, mood, emailBody } =
-    content_for_correct;
+  const { tone, quantity, spelling, mood, emailBody } = content_for_correct;
 
   const option_list = [];
 
   const mood_types = ["감정 없음", "축하", "유감"];
   const spelling_prompt =
-    "오타, 띄어쓰기, 문장 부호 중 다음에 해당 하는 부분만 교정하세요: " +
-    spelling.join(", ") +
+    "오타, 띄어쓰기, 문장 부호 중 [[ ]] 영역에 해당 하는 부분만 교정하세요: " +
+    `[[${spelling.join(", ")}]]` +
     "\n";
 
   option_list.push(makeCorrectOption(slider_desc, "tone", tone)); // tone 설정
   option_list.push(makeCorrectOption(slider_desc, "quantity", quantity));
-  option_list.push(makeCorrectOption(slider_desc, "expression", expression));
   option_list.push(spelling_prompt);
   option_list.push(`이메일의 mood는 ${mood_types[mood]}의 분위기로 하십시오`);
 
@@ -74,9 +72,8 @@ async function correctEmail(content_for_correct) {
       messages: [
         {
           role: "system",
-          content: correct_content_inst,
+          content: correct_content_inst + "\n" + whole_assistant_prompt,
         },
-        { role: "system", content: whole_assistant_prompt },
         { role: "user", content: emailBody }, // 사용자 메시지로 프롬프트를 설정
       ],
       temperature: 0.95, // 메일 내용의 다양성 조절하는 온도
@@ -95,7 +92,8 @@ async function correctEmail(content_for_correct) {
 
 const makeCorrectOption = (slider_desc, attr, deg_of_attr) => {
   return (
-    `[${slider_desc[attr][deg_of_attr].level}]\n` +
+    "# Specification\n" +
+    `## [${slider_desc[attr][deg_of_attr].level}]\n` +
     slider_desc[attr][deg_of_attr].description +
     " example:\n" +
     slider_desc[attr][deg_of_attr].example +
